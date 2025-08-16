@@ -140,6 +140,6 @@ while true do
     speed = task.wait(12)
     if Chatspam then
         local shitchat = game.TextChatService.TextChannels.RBXGeneral
-        shitchat:SendAsync(".gg nUPQCZhv8g")
+        shitchat:SendAsync(".gg Q8a9yQb7NY")
     end
 end
