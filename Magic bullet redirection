@@ -1,4 +1,4 @@
- local RunService = game:GetService("RunService")
+local RunService = game:GetService("RunService")
 local Camera = workspace.CurrentCamera
 
 local validcharacters = {}
@@ -24,8 +24,9 @@ end
 local domagic = true
 local fov = true
 local fov_show = true
-local fov_size = 250
+local fov_size = 150
 local snapline = true
+local sleep_check = true
 
 local target, spos, cachedtarget
 
@@ -56,6 +57,17 @@ local function update_fov()
 end
 update_fov()
 
+local function IsSleeping(model)
+    if model and model:FindFirstChild("AnimationController") and model.AnimationController:FindFirstChild("Animator") then
+        for _, v in pairs(model.AnimationController.Animator:GetPlayingAnimationTracks()) do
+            if v.Animation and v.Animation.AnimationId == "rbxassetid://13280887764" then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 local function get_closest_target()
     local closest, spos
     local max_dist = fov_size
@@ -63,7 +75,7 @@ local function get_closest_target()
 
     for _, character in pairs(validcharacters) do
         local head = character:FindFirstChild("Head")
-        if head then
+        if head and (not sleep_check or not IsSleeping(character)) then
             local pos, onscreen = Camera:WorldToViewportPoint(head.Position)
             if onscreen then
                 local dist = (Vector2.new(pos.X,pos.Y) - center).Magnitude
