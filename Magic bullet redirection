@@ -1,25 +1,19 @@
 local RunService = game:GetService("RunService")
 local Camera = workspace.CurrentCamera
 
-local validcharacters = {}
-do
-    local function addtovc(obj)
-        if not obj then return end
-        if not obj:FindFirstChild("Head") and not obj:FindFirstChild("LowerTorso") then return end
-        validcharacters[obj] = obj
+local GetFunction = function(Script, Line)
+    for _, v in pairs(getgc()) do
+        if typeof(v) == "function" and debug.info(v, "sl") then
+            local src, lineNum = debug.info(v, "s"), debug.info(v, "l")
+            if src:find(Script) and lineNum == Line then
+                return v
+            end
+        end
     end
-
-    local function removefromvc(obj)
-        if not validcharacters[obj] then return end
-        validcharacters[obj] = nil
-    end
-
-    for _, v in next, workspace:GetChildren() do
-        addtovc(v)
-    end
-    workspace.ChildAdded:Connect(addtovc)
-    workspace.ChildRemoved:Connect(removefromvc)
 end
+
+local SetInfraredEnabled = GetFunction("PlayerClient", 588)
+local PlayerReg = debug.getupvalue(SetInfraredEnabled, 2)
 
 local domagic = true
 local fov = true
@@ -73,16 +67,18 @@ local function get_closest_target()
     local max_dist = fov_size
     local center = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y/2)
 
-    for _, character in pairs(validcharacters) do
-        local head = character:FindFirstChild("Head")
-        if head and (not sleep_check or not IsSleeping(character)) then
-            local pos, onscreen = Camera:WorldToViewportPoint(head.Position)
-            if onscreen then
-                local dist = (Vector2.new(pos.X,pos.Y) - center).Magnitude
-                if dist < max_dist then
-                    closest = head
-                    spos = Vector2.new(pos.X,pos.Y)
-                    max_dist = dist
+    for _, player in pairs(PlayerReg) do
+        if player and player.model then
+            local head = player.model:FindFirstChild("Head")
+            if head and (not sleep_check or not IsSleeping(player.model)) then
+                local pos, onscreen = Camera:WorldToViewportPoint(head.Position)
+                if onscreen then
+                    local dist = (Vector2.new(pos.X,pos.Y) - center).Magnitude
+                    if dist < max_dist then
+                        closest = head
+                        spos = Vector2.new(pos.X,pos.Y)
+                        max_dist = dist
+                    end
                 end
             end
         end
