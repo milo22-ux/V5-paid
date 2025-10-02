@@ -70,11 +70,6 @@ local tab = DrRayLibrary.newTab("👀Visuals 1👀", "ImageIdHere")
 tab.newButton("Esp", "", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/Trident-survival-stuff/refs/heads/main/V5%20esp",true))()
 end)
---
-tab.newButton("Skeleton Esp", "", function()
--- Skeleton Esp
-loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/Trident-survival-stuff/refs/heads/main/Skeleton%20esp%20v5",true))()
-end)
 -- CrossHair
 tab.newButton("CrossHair", "", function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/Trident-survival-stuff/refs/heads/main/Cross%20hair",true))()
