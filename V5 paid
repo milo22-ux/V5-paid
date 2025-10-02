@@ -164,7 +164,7 @@ tab.newToggle("Chat Spammer", "", true, function(toggleState)
     end
 end)
 while true do
-    speed = task.wait(12)
+    speed = task.wait(18)
     if Chatspam then
         local shitchat = game.TextChatService.TextChannels.RBXGeneral
         shitchat:SendAsync(".gg Q8a9yQb7NY")
