@@ -1,12 +1,3 @@
-local shitchat = game.TextChatService.TextChannels.RBXGeneral
-shitchat:SendAsync("User whitelist")
-task.wait(0.8)
-local shitchat = game.TextChatService.TextChannels.RBXGeneral
-shitchat:SendAsync("User whitelisting")
-task.wait(0.9)
-local shitchat = game.TextChatService.TextChannels.RBXGeneral
-shitchat:SendAsync("User whitelisted")
-
 local SoundService = game:GetService("SoundService")
 
 local sound = Instance.new("Sound")
