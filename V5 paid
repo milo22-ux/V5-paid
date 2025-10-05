@@ -88,7 +88,7 @@ end)
 CombatRight:AddButton("Magic Bullet Redirection", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/V5-paid/refs/heads/main/Magic%20bullet%20redirection", true))()
 end)
-CombatRight:AddButton("Sioent aim", function()
+CombatRight:AddButton("Silent aim", function()
 local baseRadius = 200
 
 local fovCircle = Drawing.new("Circle")
