@@ -17,9 +17,128 @@ local Tabs = {
 
 local CombatLeft = Tabs.Combat:AddLeftGroupbox("Combat Left")
 local CombatRight = Tabs.Combat:AddRightGroupbox("Combat Right")
-CombatLeft:AddButton("hitbox", function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/Trident-survival-stuff/refs/heads/main/V5%20hitbox",true))()
+local validCharacters, originalHeadSizes = {}, {}
+local hitboxEnabled = false
+local hitboxHeadSizeX, hitboxHeadSizeY, hitboxHeadTransparency = 8, 8, 0.5
+local hitboxConn
+
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+
+local function isCharacterModel(m)
+return typeof(m) == "Instance" and m:IsA("Model") and (m:FindFirstChild("Head") or m:FindFirstChild("LowerTorso"))
+end
+
+local function addToVC(obj)
+if isCharacterModel(obj) then
+validCharacters[obj] = true
+local head = obj:FindFirstChild("Head")
+if head and head:IsA("BasePart") and not originalHeadSizes[head] then
+originalHeadSizes[head] = head.Size
+end
+obj.ChildAdded:Connect(function(c)
+if c.Name == "Head" and c:IsA("BasePart") then
+if not originalHeadSizes[c] then
+originalHeadSizes[c] = c.Size
+end
+end
 end)
+end
+end
+
+local function removeFromVC(obj)
+validCharacters[obj] = nil
+end
+
+for _, v in ipairs(Workspace:GetChildren()) do
+addToVC(v)
+end
+Workspace.ChildAdded:Connect(addToVC)
+Workspace.ChildRemoved:Connect(removeFromVC)
+
+local function applyHitboxOnce()
+local newSize = Vector3.new(hitboxHeadSizeX, hitboxHeadSizeY, hitboxHeadSizeX)
+for model, _ in pairs(validCharacters) do
+local head = model:FindFirstChild("Head")
+if head then
+if not originalHeadSizes[head] then
+originalHeadSizes[head] = head.Size
+end
+head.Size = newSize
+head.Transparency = hitboxHeadTransparency
+head.CanCollide = false
+end
+end
+end
+
+local function restoreHitbox()
+for head, orig in pairs(originalHeadSizes) do
+if head and head.Parent then
+head.Size = orig
+head.Transparency = 0
+end
+end
+end
+
+local function setHitboxEnabled(value)
+hitboxEnabled = value
+if hitboxConn then
+hitboxConn:Disconnect()
+hitboxConn = nil
+end
+if value then
+hitboxConn = RunService.Heartbeat:Connect(applyHitboxOnce)
+else
+restoreHitbox()
+end
+end
+
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('Hitbox Settings')
+
+LeftGroupBox:AddToggle('HitboxToggle', {
+Text = 'Enable Hitbox',
+Default = false,
+Tooltip = 'Toggles the head hitbox on/off',
+Callback = function(Value)
+setHitboxEnabled(Value)
+end
+})
+
+LeftGroupBox:AddSlider('HitboxSizeX', {
+Text = 'Head Size X',
+Default = hitboxHeadSizeX,
+Min = 1,
+Max = 15,
+Rounding = 1,
+Compact = false,
+Callback = function(Value)
+hitboxHeadSizeX = Value
+end
+})
+
+LeftGroupBox:AddSlider('HitboxSizeY', {
+Text = 'Head Size Y',
+Default = hitboxHeadSizeY,
+Min = 1,
+Max = 15,
+Rounding = 1,
+Compact = false,
+Callback = function(Value)
+hitboxHeadSizeY = Value
+end
+})
+
+LeftGroupBox:AddSlider('HitboxTransparency', {
+Text = 'Head Transparency',
+Default = hitboxHeadTransparency,
+Min = 0,
+Max = 1,
+Rounding = 0.1,
+Compact = false,
+Callback = function(Value)
+hitboxHeadTransparency = Value
+end
+})
 CombatLeft:AddToggle("NoSpread", {
     Text = "No Spread",
     Default = false,
