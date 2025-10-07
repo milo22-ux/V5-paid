@@ -24,7 +24,7 @@ local Window = Library:CreateWindow({
     Center = true,
     AutoShow = true,
     TabPadding = 8,
-    MenuFadeTime = 0.2
+    MenuFadeTime = 2
 })
 
 local Tabs = {
