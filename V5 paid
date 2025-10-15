@@ -256,12 +256,19 @@ end
 function CalculateBulletDrop(tPos, tVel, cPos, pSpeed, pDrop)
     local dTT = (tPos - cPos).Magnitude
     local tTT = dTT / pSpeed
+
+    local sVE = 8.8 - (pSpeed / (400 + pSpeed / 30))
+
     local horizontalVel = Vector3.new(tVel.X, 0, tVel.Z) * 7
     local verticalVel = Vector3.new(0, tVel.Y, 0) * 2
+
     local adjustedVel = horizontalVel + verticalVel
+
     local pTP = tPos + (adjustedVel * tTT)
+
     local dP = -pDrop ^ (tTT * pDrop) + 1
     local pPWD = pTP - Vector3.new(0, dP, 0)
+
     return pPWD
 end
 
