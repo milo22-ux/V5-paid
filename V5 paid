@@ -222,10 +222,6 @@ meta.__namecall = function(...)
 end
 setreadonly(meta, true)
 
-silent:AddButton("Magic Bullet Redirection", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/milo22-ux/V5-paid/refs/heads/main/Magic%20bullet%20redirection", true))()
-end)
-
 local fovCircle = nil
 local snapLine = nil
 
@@ -713,7 +709,6 @@ local random = Tabs.Visuals:AddRightGroupbox('Random Esps')
 local world = Tabs.Visuals:AddRightGroupbox('World')
 local stuff = Tabs.Misc:AddLeftGroupbox('Stuff')
 local Config = Tabs.Config:AddLeftGroupbox('Menu')
-
 
 local gun = cool:AddToggle('custom_gun', {
 	Text = 'Custom gun',
