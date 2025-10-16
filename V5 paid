@@ -7,6 +7,7 @@ visuals = {
         ore_name_color = Color3.fromRGB(255, 0, 0)
     }
 }
+
 local SoundService = game:GetService("SoundService")
 
 local sound = Instance.new("Sound")
@@ -297,7 +298,6 @@ task.spawn(function()
         end
     end
 end)
-			
 local constIgnore = workspace:WaitForChild("Const"):WaitForChild("Ignore")
 local fpsArms = constIgnore:WaitForChild("FPSArms")
 local gunModel = fpsArms:FindFirstChild("HandModel")
@@ -398,7 +398,7 @@ arms:AddLabel('Arms Color'):AddColorPicker('ArmsColorPicker', {
 	end
 })
     
-    local vercore = {}
+local vercore = {}
 
 function vercore:Create(className, properties)
     local success, object = pcall(Drawing.new, className)
@@ -526,88 +526,6 @@ ore:AddLabel('Ore Name Color'):AddColorPicker('OreNameColor', {
         end
     end
 })
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-
-local player = Players.LocalPlayer
-local transparencyValue = 0.8
-local xrayEnabled = false
-
-local classes = getrenv()._G.classes
-local entityClient = classes.EntityClient
-
-local entityList = {}
-local allowedTypes = {
-    Roof = true,
-    Wall = true,
-    TriangleRoof = true,
-    HalfWall = true,
-    Door = true,
-    ForceGate = true,
-    Foundation = true,
-    TriangleFoundation = true,
-    DoubleDoor = true
-}
-
-local function addEntity(v)
-    if v:IsA("Model") then
-        local part = v:FindFirstChildWhichIsA("Part") or v:FindFirstChildWhichIsA("MeshPart")
-        if part then
-            local entity = entityClient.GetEntityFromPart(part)
-            if entity and allowedTypes[entity.type] then
-                if not entityList[entity.type] then
-                    entityList[entity.type] = {}
-                end
-                table.insert(entityList[entity.type], entity)
-            end
-        end
-    end
-end
-
-local function collectEntities()
-    entityList = {}
-    for _, v in pairs(workspace:GetChildren()) do
-        addEntity(v)
-    end
-end
-
-local function setTransparency(value)
-    for _, list in pairs(entityList) do
-        for _, entity in pairs(list) do
-            if entity.root and entity.root:IsA("BasePart") then
-                entity.root.LocalTransparencyModifier = value
-            end
-            if entity.model and entity.model:IsA("Model") then
-                for _, part in pairs(entity.model:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.LocalTransparencyModifier = value
-                    end
-                end
-            end
-        end
-    end
-end
-
-RunService.Heartbeat:Connect(function()
-    if not xrayEnabled then return end
-    collectEntities()
-    setTransparency(transparencyValue)
-end)
-
-world:AddToggle('XRay', {
-    Text = 'X-Ray',
-    Default = false,
-    Tooltip = 'Makes specific building parts transparent',
-    Callback = function(Value)
-        xrayEnabled = Value
-        if not Value then
-            collectEntities()
-            setTransparency(0)
-        end
-    end
-})
-
-Toggles.XRayToggle:SetValue(false)
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -712,16 +630,14 @@ RunService.Heartbeat:Connect(function(delta)
 	end
 end)
 
-extra:AddToggle('Freecam', {
-	Text = 'Freecam',
-	Default = true,
-	Tooltip = 'Shows or hides the Freecam button and WASD UI',
-	Callback = function(Value)
-		screenGui.Enabled = Value
-	end
+extra:AddToggle('FreecamToggle', {
+    Text = 'freecam',
+    Default = true,
+    Tooltip = '',
+    Callback = function(Value)
+        screenGui.Enabled = Value
+    end
 })
-
-Toggles.FreecamUIToggle:SetValue(true)
 
 local LogService = game:GetService("LogService")
 local Players = game:GetService("Players")
@@ -819,6 +735,6 @@ SaveManager:IgnoreThemeSettings()
 SaveManager:SetIgnoreIndexes({ 'MenuKeybind' })
 ThemeManager:SetFolder('Vercore')
 SaveManager:SetFolder('Vercore/Trident')
-SaveManager:BuildConfigSection(Tabs.config)
-ThemeManager:ApplyToTab(Tabs.config)
+SaveManager:BuildConfigSection(Tabs.Settings)
+ThemeManager:ApplyToTab(Tabs.Settings)
 SaveManager:LoadAutoloadconfig()
