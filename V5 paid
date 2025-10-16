@@ -288,9 +288,15 @@ task.spawn(function()
         end
     end
 end)
+			
 local constIgnore = workspace:WaitForChild("Const"):WaitForChild("Ignore")
 local fpsArms = constIgnore:WaitForChild("FPSArms")
 local gunModel = fpsArms:FindFirstChild("HandModel")
+
+local gunColorEnabled = false
+local armsColorEnabled = false
+local gunColor = Color3.fromRGB(255, 0, 0)
+local armsColor = Color3.fromRGB(255, 0, 0)
 
 local function safeMerge(tblA, tblB)
 	local merged = {}
@@ -339,14 +345,14 @@ updateModel()
 
 guns:AddToggle('GunColorToggle', {
 	Text = 'Enable Gun Color',
-	Default = true,
+	Default = false,
 	Tooltip = 'Toggle gun color on/off',
 	Callback = function(Value)
 		gunColorEnabled = Value
 		updateModel()
 	end
 })
-Toggles.GunColorToggle:SetValue(true)
+Toggles.GunColorToggle:SetValue(false)
 
 guns:AddLabel('Gun Color'):AddColorPicker('GunColorPicker', {
 	Default = gunColor,
@@ -362,14 +368,14 @@ guns:AddLabel('Gun Color'):AddColorPicker('GunColorPicker', {
 
 arms:AddToggle('ArmsColorToggle', {
 	Text = 'Enable Arms Color',
-	Default = true,
+	Default = false,
 	Tooltip = 'Toggle arms color on/off',
 	Callback = function(Value)
 		armsColorEnabled = Value
 		updateModel()
 	end
 })
-Toggles.ArmsColorToggle:SetValue(true)
+Toggles.ArmsColorToggle:SetValue(false)
 
 arms:AddLabel('Arms Color'):AddColorPicker('ArmsColorPicker', {
 	Default = armsColor,
